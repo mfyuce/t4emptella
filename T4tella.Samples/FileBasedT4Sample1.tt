@@ -1,0 +1,28 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #> 
+<#@ output extension=".xml"   #>
+
+
+<!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
+<etl>
+    <description>
+      Simple SQL Code Generator
+    </description>
+	<properties> 
+		etl.tablename=<#= this.Data#>
+	</properties> 
+    <connection id="text" driver="text" url="${template.outputfile}"/>   
+	<script connection-id="text"> <![CDATA[
+	   BEGIN
+	   EXECUTE IMMEDIATE 'DROP TABLE ${etl.tablename}';
+		EXCEPTION
+		   WHEN OTHERS THEN
+			  IF SQLCODE != -942 THEN
+				 RAISE;
+			  END IF;
+		END;
+	]]></script>   
+</etl>
